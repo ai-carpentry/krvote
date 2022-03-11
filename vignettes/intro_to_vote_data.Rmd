@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+library(tidyverse)
 ```
 
 ```{r setup}
@@ -25,7 +27,6 @@ library(krvote)
 ## 제19대 대선 투표율
 
 ```{r president-casting}
-library(tidyverse)
 
 election_20170509$투표율  %>% 
   head(10) %>% 

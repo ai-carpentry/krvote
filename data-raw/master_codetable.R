@@ -31,7 +31,7 @@ election_code_list <- GET(data_portal_election_code_request) %>%
   jsonlite::fromJSON()
 
 ## 1.2. 데이터 정제 -------------------------
-election_code <- election_code_list %>%
+code_election <- election_code_list %>%
   pluck('getCommonSgCodeList') %>%
   pluck('item') %>%
   as_tibble() %>%
@@ -42,11 +42,11 @@ election_code <- election_code_list %>%
 
 test_that("중앙선거관리위원회 마스터 코드 단위테스트", {
 
-  election_code_unit_test <- election_code %>%
+  code_election_unit_test <- code_election %>%
     filter(str_detect(선거명, "제18대 대통령선거"))
 
   ## 선거코드
-  expect_that( election_code_unit_test %>% pull(선거코드), equals( "20121219") )
+  expect_that( code_election_unit_test %>% pull(선거코드), equals( "20121219") )
 
 })
 
@@ -54,9 +54,65 @@ test_that("중앙선거관리위원회 마스터 코드 단위테스트", {
 ## 1.4. 데이터 내보내기 -------------------------
 ### 1.4.1. 인코딩 -------------------
 
-election_code <- clean_varnames(election_code)
+code_election <- clean_varnames(code_election)
 
 ### 1.4.2. 내보내기 -------------------
 
-usethis::use_data(election_code, overwrite = TRUE)
+usethis::use_data(code_election, overwrite = TRUE)
+
+# 2. 정당코드 -------------------------
+## 2.1. GET 요청 -------------------------
+
+unique_code_election_v <- code_election %>%
+  pull(선거코드) %>%
+  unique()
+
+get_party_code_from_data_portal <- function(election_code = '20200415') {
+
+  data_portal_party_code_request <-
+    glue::glue("http://apis.data.go.kr/9760000/CommonCodeService/getCommonPartyCodeList",
+               "?resultType=json",
+               "&numOfRows=1000",
+               "&sgId={election_code}",
+               "&serviceKey={Sys.getenv('DATA_APIKEY')}")
+
+  party_code_list <- GET(data_portal_party_code_request) %>%
+    content(as = "text") %>%
+    jsonlite::fromJSON()
+
+  party_code <- party_code_list %>%
+    pluck('getCommonPartyCodeList') %>%
+    pluck('item') %>%
+    as_tibble() %>%
+    janitor::clean_names(ascii = FALSE) %>%
+    select(선거코드 = sg_id, 정당명 = jd_name)
+
+  party_code
+}
+
+code_party <- tibble(선거코드 = unique_code_election_v) %>%
+  mutate(data = map(선거코드, get_party_code_from_data_portal))
+
+
+## 1.3. 단위테스트 검증 -------------
+
+test_that("중앙선거관리위원회 정당 코드 단위테스트", {
+
+  # code_party %>%
+  #   select(data) %>%
+  #   unnest(data)
+
+})
+
+
+## 1.3. 데이터 내보내기 -------------------------
+### 1.3.1. 인코딩 -------------------
+
+code_party <- clean_varnames(code_party)
+
+### 1.3.2. 내보내기 -------------------
+
+usethis::use_data(code_party, overwrite = TRUE)
+
+
 

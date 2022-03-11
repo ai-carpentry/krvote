@@ -1,0 +1,45 @@
+---
+title: "선거 데이터"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{선거 데이터}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(krvote)
+```
+
+# 대통령 선거 데이터
+
+## 제19대 대선 투표율
+
+```{r president-casting}
+library(tidyverse)
+
+election_20170509$투표율  %>% 
+  head(10) %>% 
+  knitr::kable()
+  
+```
+
+## 제19대 대선 득표
+
+```{r president-voting}
+
+election_20170509$득표율 %>% 
+  select(시도명:심상정) %>% 
+  head(10) %>% 
+  knitr::kable()
+
+```

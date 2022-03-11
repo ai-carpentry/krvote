@@ -2,6 +2,6 @@ pandoc: 2.14.0.3
 pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
-  intro_to_vote_data: intro_to_vote_data.html
-last_built: 2022-03-11T03:36Z
+  krvote_intro: krvote_intro.html
+last_built: 2022-03-11T03:48Z
 

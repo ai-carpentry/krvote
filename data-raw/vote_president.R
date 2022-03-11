@@ -119,10 +119,17 @@ election_20170509_voting  <- clean_varnames(election_20170509_voting)
 
 ## 4.2. 내보내기 -------------------
 
-election_20170509 <- list(meta = list(title = "제19대 대통령선거",
-                                      data  = "투표구별 투표, 투표구/후보별 득표"),
-                          투표율 = election_20170509_casting,
-                          득표율 = election_20170509_voting)
+election_20170509 <- list( meta = list(
+  title =  stringi::stri_escape_unicode("제19대 대통령선거") %>% stringi::stri_unescape_unicode(.),
+  data  = stringi::stri_escape_unicode("투표구별 투표, 투표구/후보별 득표") %>% stringi::stri_unescape_unicode(.) ),
+  득표율 = election_20170509_casting,
+  투표율 = election_20170509_voting )
+
+list_names <- names(election_20170509) %>%
+  stringi::stri_escape_unicode(.) %>%
+  stringi::stri_unescape_unicode(.)
+
+names(election_20170509) <- list_names
 
 usethis::use_data(election_20170509, overwrite = TRUE)
 

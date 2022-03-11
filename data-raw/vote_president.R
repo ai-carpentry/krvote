@@ -22,6 +22,7 @@ library(here)
 election_20170509_xlsx <- read_excel("inst/extdata/president/제19대선-투표구별개표자료.xlsx", sheet="19대선", skip=1) %>%
   janitor::clean_names(ascii = FALSE)
 
+# Encoding(election_20170509_xlsx[[1]])
 
 ## 2. 데이터 정제작업 -------------
 
@@ -98,6 +99,25 @@ test_that("대선 2018 후보득표검증", {
 
 
 # 4. 데이터 내보내기 -------------
+## 4.1. 인코딩 -------------------
+
+clean_varnames <- function(raw_data) {
+
+  varnames <- names( raw_data )
+
+  varnames_unicode <- map_chr(varnames, stringi::stri_escape_unicode )
+
+  varnames_unicode_to_korean <- map_chr(varnames_unicode, stringi::stri_unescape_unicode)
+
+  unicode_data <- raw_data %>%
+    set_names(varnames_unicode_to_korean)
+
+}
+
+election_20170509_casting <- clean_varnames(election_20170509_casting)
+election_20170509_voting  <- clean_varnames(election_20170509_voting)
+
+## 4.2. 내보내기 -------------------
 
 election_20170509 <- list(meta = list(title = "제19대 대통령선거",
                                       data  = "투표구별 투표, 투표구/후보별 득표"),
@@ -105,4 +125,5 @@ election_20170509 <- list(meta = list(title = "제19대 대통령선거",
                           득표율 = election_20170509_voting)
 
 usethis::use_data(election_20170509, overwrite = TRUE)
+
 

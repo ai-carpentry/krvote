@@ -44,3 +44,24 @@ election_20170509$득표율 %>%
   knitr::kable()
 
 ```
+
+## 제18대 대선 투표율
+
+```{r president-casting-2012}
+
+election_20121219$투표율  %>% 
+  head(10) %>% 
+  knitr::kable()
+  
+```
+
+## 제18대 대선 득표
+
+```{r president-voting-2012}
+
+election_20121219$득표율 %>% 
+  select(시도명:문재인) %>% 
+  head(10) %>% 
+  knitr::kable()
+
+```

@@ -21,3 +21,11 @@
 # # sinew::makeOxygen(election_20170509$득표율, add_fields = "source")
 #
 #
+
+# banner_txt <- bannerCommenter::copy_to_clipboard(bannerCommenter::banner("제18대 대통령",
+#                                        numLines = 1,
+#                                        bandChar = "-"))
+# bannerCommenter::copy_to_clipboard(banner_txt)
+#
+#
+# sinew::makeOxygen(election_20121219$투표율, add_fields = "source")

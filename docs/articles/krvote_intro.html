@@ -353,6 +353,251 @@
 </tbody>
 </table>
 </div>
+<div class="section level3">
+<h3 id="제18대-대선-투표율">제18대 대선 투표율<a class="anchor" aria-label="anchor" href="#%EC%A0%9C18%EB%8C%80-%EB%8C%80%EC%84%A0-%ED%88%AC%ED%91%9C%EC%9C%A8"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>election_20121219<span class="sc">$</span>투표율  <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">시도명</th>
+<th align="left">구시군명</th>
+<th align="left">읍면동명</th>
+<th align="left">투표구명</th>
+<th align="right">선거인수</th>
+<th align="right">투표수</th>
+<th align="right">무효투표수</th>
+<th align="right">기권수</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">재외투표</td>
+<td align="left">재외투표</td>
+<td align="right">2138</td>
+<td align="right">1626</td>
+<td align="right">9</td>
+<td align="right">512</td>
+</tr>
+<tr class="even">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">국내부재자투표</td>
+<td align="left">국내부재자투표</td>
+<td align="right">2689</td>
+<td align="right">2507</td>
+<td align="right">48</td>
+<td align="right">182</td>
+</tr>
+<tr class="odd">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">청운효자동</td>
+<td align="left">청운효자동제1투</td>
+<td align="right">3596</td>
+<td align="right">2631</td>
+<td align="right">8</td>
+<td align="right">965</td>
+</tr>
+<tr class="even">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">청운효자동</td>
+<td align="left">청운효자동제2투</td>
+<td align="right">4068</td>
+<td align="right">3159</td>
+<td align="right">15</td>
+<td align="right">909</td>
+</tr>
+<tr class="odd">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">청운효자동</td>
+<td align="left">청운효자동제3투</td>
+<td align="right">3941</td>
+<td align="right">3117</td>
+<td align="right">17</td>
+<td align="right">824</td>
+</tr>
+<tr class="even">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">사직동</td>
+<td align="left">사직동제1투</td>
+<td align="right">3799</td>
+<td align="right">2637</td>
+<td align="right">10</td>
+<td align="right">1162</td>
+</tr>
+<tr class="odd">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">사직동</td>
+<td align="left">사직동제2투</td>
+<td align="right">4543</td>
+<td align="right">3403</td>
+<td align="right">10</td>
+<td align="right">1140</td>
+</tr>
+<tr class="even">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">삼청동</td>
+<td align="left">삼청동투표소</td>
+<td align="right">2767</td>
+<td align="right">2032</td>
+<td align="right">12</td>
+<td align="right">735</td>
+</tr>
+<tr class="odd">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">부암동</td>
+<td align="left">부암동제1투</td>
+<td align="right">3500</td>
+<td align="right">2460</td>
+<td align="right">13</td>
+<td align="right">1040</td>
+</tr>
+<tr class="even">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">부암동</td>
+<td align="left">부암동제2투</td>
+<td align="right">2731</td>
+<td align="right">2162</td>
+<td align="right">8</td>
+<td align="right">569</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="제18대-대선-득표">제18대 대선 득표<a class="anchor" aria-label="anchor" href="#%EC%A0%9C18%EB%8C%80-%EB%8C%80%EC%84%A0-%EB%93%9D%ED%91%9C"></a>
+</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>election_20121219<span class="sc">$</span>득표율 <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(시도명<span class="sc">:</span>문재인) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">시도명</th>
+<th align="left">구시군명</th>
+<th align="left">읍면동명</th>
+<th align="left">투표구명</th>
+<th align="right">선거인수</th>
+<th align="right">투표수</th>
+<th align="right">박근혜</th>
+<th align="right">문재인</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">재외투표</td>
+<td align="left">재외투표</td>
+<td align="right">2138</td>
+<td align="right">1626</td>
+<td align="right">798</td>
+<td align="right">807</td>
+</tr>
+<tr class="even">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">국내부재자투표</td>
+<td align="left">국내부재자투표</td>
+<td align="right">2689</td>
+<td align="right">2507</td>
+<td align="right">1167</td>
+<td align="right">1274</td>
+</tr>
+<tr class="odd">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">청운효자동</td>
+<td align="left">청운효자동제1투</td>
+<td align="right">3596</td>
+<td align="right">2631</td>
+<td align="right">1302</td>
+<td align="right">1307</td>
+</tr>
+<tr class="even">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">청운효자동</td>
+<td align="left">청운효자동제2투</td>
+<td align="right">4068</td>
+<td align="right">3159</td>
+<td align="right">1576</td>
+<td align="right">1556</td>
+</tr>
+<tr class="odd">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">청운효자동</td>
+<td align="left">청운효자동제3투</td>
+<td align="right">3941</td>
+<td align="right">3117</td>
+<td align="right">1355</td>
+<td align="right">1735</td>
+</tr>
+<tr class="even">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">사직동</td>
+<td align="left">사직동제1투</td>
+<td align="right">3799</td>
+<td align="right">2637</td>
+<td align="right">1272</td>
+<td align="right">1346</td>
+</tr>
+<tr class="odd">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">사직동</td>
+<td align="left">사직동제2투</td>
+<td align="right">4543</td>
+<td align="right">3403</td>
+<td align="right">2176</td>
+<td align="right">1205</td>
+</tr>
+<tr class="even">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">삼청동</td>
+<td align="left">삼청동투표소</td>
+<td align="right">2767</td>
+<td align="right">2032</td>
+<td align="right">1099</td>
+<td align="right">909</td>
+</tr>
+<tr class="odd">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">부암동</td>
+<td align="left">부암동제1투</td>
+<td align="right">3500</td>
+<td align="right">2460</td>
+<td align="right">1200</td>
+<td align="right">1239</td>
+</tr>
+<tr class="even">
+<td align="left">서울특별시</td>
+<td align="left">종로구</td>
+<td align="left">부암동</td>
+<td align="left">부암동제2투</td>
+<td align="right">2731</td>
+<td align="right">2162</td>
+<td align="right">1086</td>
+<td align="right">1058</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

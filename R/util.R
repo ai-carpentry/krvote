@@ -28,4 +28,4 @@
 # bannerCommenter::copy_to_clipboard(banner_txt)
 #
 #
-# sinew::makeOxygen(election_20121219$투표율, add_fields = "source")
+# sinew::makeOxygen(code_precinct, add_fields = "source")

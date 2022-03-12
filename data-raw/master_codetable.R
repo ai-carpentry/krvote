@@ -95,7 +95,7 @@ get_party_code_from_data_portal <- function(election_code = '20200415') {
 code_party_raw <- tibble(선거코드 = unique_code_election_v) %>%
   mutate(data = map(선거코드, get_party_code_from_data_portal))
 
-## 1.3. 단위테스트 검증 -------------
+## 2.3. 단위테스트 검증 -------------
 
 test_that("중앙선거관리위원회 정당 코드 단위테스트", {
 
@@ -106,17 +106,80 @@ test_that("중앙선거관리위원회 정당 코드 단위테스트", {
 })
 
 
-## 1.3. 데이터 내보내기 -------------------------
-### 1.3.1. 인코딩 -------------------
+## 2.3. 데이터 내보내기 -------------------------
+### 2.3.1. 인코딩 -------------------
 
 code_party <- code_party_raw %>%
   mutate(data = map(data, clean_varnames))
 
 code_party <- clean_varnames(code_party)
 
-### 1.3.2. 내보내기 -------------------
+### 2.3.2. 내보내기 -------------------
 
 usethis::use_data(code_party, overwrite = TRUE)
+
+
+# 3. 선거구 코드 -------------------------
+## 3.1. GET 요청 -------------------------
+
+get_precinct_from_data_portal <- function(electionCode = "20200415", sgTypecode =  "2") {
+
+  data_portal_precinct_request <-
+    glue::glue("http://apis.data.go.kr/9760000/CommonCodeService/getCommonSggCodeList",
+               "?resultType=json",
+               "&numOfRows=10000",
+               "&sgId={electionCode}",
+               "&sgTypecode={sgTypecode}",
+               "&serviceKey={Sys.getenv('DATA_APIKEY')}")
+
+
+  precinct_code_list <- content(GET(data_portal_precinct_request), as = "text") %>%
+    jsonlite::fromJSON()
+
+  precinct_code <- precinct_code_list %>%
+    pluck('getCommonSggCodeList') %>%
+    pluck('item') %>%
+    as_tibble() %>%
+    janitor::clean_names(ascii = FALSE) %>%
+    select(선거코드 = sg_id, 선거구명 = sgg_name, 시도명 = sd_name, 구시군명 = wiw_name)
+
+  precinct_code
+}
+
+code_precinct_raw <- krvote::code_election %>%
+  mutate(data = map2(선거코드, 선거구분, safely(get_precinct_from_data_portal, otherwise = "error")))
+
+code_precinct <- code_precinct_raw %>%
+  mutate(error = map(data, "error")) %>%
+  mutate(check = map_lgl(error, is.null)) %>%
+  filter(check) %>%
+  mutate(result = map(data, "result")) %>%
+  select(선거코드, 선거명, 선거구분, data = result)
+
+
+
+## 3.2. 단위테스트 검증 -------------
+
+test_that("중앙선거관리위원회 정당 코드 단위테스트", {
+
+  # code_party %>%
+  #   select(data) %>%
+  #   unnest(data)
+
+})
+
+
+## 3.3. 데이터 내보내기 -------------------------
+### 3.3.1. 인코딩 -------------------
+
+code_precinct <- code_precinct %>%
+  mutate(data = map(data, clean_varnames))
+
+code_precinct <- clean_varnames(code_precinct)
+
+### 1.3.2. 내보내기 -------------------
+
+usethis::use_data(code_precinct, overwrite = TRUE)
 
 
 

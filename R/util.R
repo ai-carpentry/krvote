@@ -53,4 +53,4 @@ bannerCommenter::copy_to_clipboard(bannerCommenter::banner("시도별 선거인�
 # bannerCommenter::copy_to_clipboard(banner_txt)
 #
 #
-# sinew::makeOxygen(voter_precinct, add_fields = "source")
+# sinew::makeOxygen(counting_votes, add_fields = "source")

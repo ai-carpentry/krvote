@@ -63,11 +63,13 @@ usethis::use_data(code_election, overwrite = TRUE)
 # 2. 정당코드 -------------------------
 ## 2.1. GET 요청 -------------------------
 
-unique_code_election_v <- code_election %>%
+unique_code_election_v <- krvote::code_election %>%
   pull(선거코드) %>%
   unique()
 
 get_party_code_from_data_portal <- function(election_code = '20200415') {
+
+  cat("\n------------------------------\n", election_code, "\n")
 
   data_portal_party_code_request <-
     glue::glue("http://apis.data.go.kr/9760000/CommonCodeService/getCommonPartyCodeList",
@@ -90,9 +92,8 @@ get_party_code_from_data_portal <- function(election_code = '20200415') {
   party_code
 }
 
-code_party <- tibble(선거코드 = unique_code_election_v) %>%
+code_party_raw <- tibble(선거코드 = unique_code_election_v) %>%
   mutate(data = map(선거코드, get_party_code_from_data_portal))
-
 
 ## 1.3. 단위테스트 검증 -------------
 
@@ -107,6 +108,9 @@ test_that("중앙선거관리위원회 정당 코드 단위테스트", {
 
 ## 1.3. 데이터 내보내기 -------------------------
 ### 1.3.1. 인코딩 -------------------
+
+code_party <- code_party_raw %>%
+  mutate(data = map(data, clean_varnames))
 
 code_party <- clean_varnames(code_party)
 

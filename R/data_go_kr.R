@@ -48,3 +48,21 @@
 #' @examples code_precinct
 "code_precinct"
 
+
+#' @title 중앙선거관리위원회 구시군코드
+#'
+#' 공공데이터포털 - 중앙선거관리위원회 구시군코드
+#' 검색어: 중앙선거관리위원회 코드정보
+#'
+#' @description 중앙선거관리위원회 구시군코드
+#' @format A data frame with 15 rows and 2 variables:
+#' \describe{
+#'   \item{선거코드}{문자형, 선거실시일을 코드기준값으로 설정}
+#'   \item{data}{티블, 선거코드, 시도명, 구시군명 총 3 변수를 갖는 데이터프레임}
+#' }
+#' @source \url{https://www.data.go.kr/}
+#' @examples code_gusigun
+"code_gusigun"
+
+
+

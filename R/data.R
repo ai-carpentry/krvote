@@ -1,5 +1,3 @@
-
-
 #' @title 제19대 대통령선거 2017년
 #' @description 2017년 제19대 대통령 선거 결과 (선거관리위원회)
 #' @format 투표율( 18455 rows and 8 variables)과 득표율(18455 rows and 20 variable) 데이터프레임 정보를 갖는 리스트(list):

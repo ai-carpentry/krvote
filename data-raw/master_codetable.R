@@ -92,6 +92,8 @@ get_party_code_from_data_portal <- function(election_code = '20200415') {
   party_code
 }
 
+## 2.2. 데이터 정제 -------------------------
+
 code_party_raw <- tibble(선거코드 = unique_code_election_v) %>%
   mutate(data = map(선거코드, get_party_code_from_data_portal))
 
@@ -146,6 +148,8 @@ get_precinct_from_data_portal <- function(electionCode = "20200415", sgTypecode 
   precinct_code
 }
 
+## 3.2. 데이터 정제 -------------------------
+
 code_precinct_raw <- krvote::code_election %>%
   mutate(data = map2(선거코드, 선거구분, safely(get_precinct_from_data_portal, otherwise = "error")))
 
@@ -158,7 +162,7 @@ code_precinct <- code_precinct_raw %>%
 
 
 
-## 3.2. 단위테스트 검증 -------------
+## 3.3. 단위테스트 검증 -------------
 
 test_that("중앙선거관리위원회 정당 코드 단위테스트", {
 
@@ -169,17 +173,84 @@ test_that("중앙선거관리위원회 정당 코드 단위테스트", {
 })
 
 
-## 3.3. 데이터 내보내기 -------------------------
-### 3.3.1. 인코딩 -------------------
+## 3.4. 데이터 내보내기 -------------------------
+### 3.4.1. 인코딩 -------------------
 
 code_precinct <- code_precinct %>%
   mutate(data = map(data, clean_varnames))
 
 code_precinct <- clean_varnames(code_precinct)
 
-### 1.3.2. 내보내기 -------------------
+### 3.4.2. 내보내기 -------------------
 
 usethis::use_data(code_precinct, overwrite = TRUE)
+
+
+# 4. 구시군 코드 -------------------------
+## 4.1. GET 요청 -------------------------
+
+get_gusigun_from_data_portal <- function(electionCode = '20200415') {
+
+  cat("\n------------------------------------\n", electionCode, "\n")
+
+  data_portal_gusigun_code_request <-
+    glue::glue("http://apis.data.go.kr/9760000/CommonCodeService/getCommonGusigunCodeList",
+               "?resultType=json",
+               "&sgId={electionCode}",
+               "&numOfRows=10000",
+               "&serviceKey={Sys.getenv('DATA_APIKEY')}")
+
+  gusigun_code_list <- content(GET(data_portal_gusigun_code_request), as = "text") %>%
+    jsonlite::fromJSON()
+
+  gusigun_code <- gusigun_code_list %>%
+    pluck('getCommonGusigunCodeList') %>%
+    pluck('item') %>%
+    as_tibble() %>%
+    janitor::clean_names(ascii = FALSE) %>%
+    filter(str_detect(sd_name, "[가-힣]{2,}")) %>%
+    select(선거코드 = sg_id, 시도명 = sd_name, 구시군명 = wiw_name)
+
+  gusigun_code
+}
+
+## 4.2. 데이터 정제 -------------------------
+
+code_gusigun_raw <- krvote::code_election %>%
+  group_by(선거코드) %>%
+  summarise(선거코드수 = n()) %>%
+  mutate(data = map(선거코드, safely(get_gusigun_from_data_portal, otherwise = "error")))
+
+code_gusigun <- code_gusigun_raw %>%
+  mutate(error = map(data, "error")) %>%
+  mutate(check = map_lgl(error, is.null)) %>%
+  filter(check) %>%
+  mutate(result = map(data, "result")) %>%
+  select(선거코드, data = result)
+
+## 4.3. 단위테스트 검증 -------------
+
+test_that("중앙선거관리위원회 구시군 코드 단위테스트", {
+
+  # code_party %>%
+  #   select(data) %>%
+  #   unnest(data)
+
+})
+
+
+## 4.4. 데이터 내보내기 -------------------------
+### 4.4.1. 인코딩 -------------------
+
+code_gusigun <- code_gusigun %>%
+  mutate(data = map(data, clean_varnames))
+
+code_gusigun <- clean_varnames(code_gusigun)
+
+### 4.4.2. 내보내기 -------------------
+
+usethis::use_data(code_gusigun, overwrite = TRUE)
+
 
 
 

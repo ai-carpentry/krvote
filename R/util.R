@@ -28,4 +28,4 @@
 # bannerCommenter::copy_to_clipboard(banner_txt)
 #
 #
-# sinew::makeOxygen(code_precinct, add_fields = "source")
+# sinew::makeOxygen(code_gusigun, add_fields = "source")

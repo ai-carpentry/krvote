@@ -3,7 +3,7 @@
 \docType{data}
 \name{code_precinct}
 \alias{code_precinct}
-\title{선거구 코드}
+\title{중앙선거관리위원회 선거구 코드}
 \format{
 63개 관측점과 4개 변수를 갖는 데이터프레임
 \describe{

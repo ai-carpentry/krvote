@@ -19,6 +19,9 @@
     <loc>/index.html</loc>
   </url>
   <url>
+    <loc>/reference/clean_varnames.html</loc>
+  </url>
+  <url>
     <loc>/reference/code_election.html</loc>
   </url>
   <url>
@@ -44,5 +47,17 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/voter_emd.html</loc>
+  </url>
+  <url>
+    <loc>/reference/voter_gusigun.html</loc>
+  </url>
+  <url>
+    <loc>/reference/voter_sido.html</loc>
+  </url>
+  <url>
+    <loc>/reference/voter_station.html</loc>
   </url>
 </urlset>

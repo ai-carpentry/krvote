@@ -179,7 +179,7 @@ test_that("중앙선거관리위원회 정당 코드 단위테스트", {
 code_precinct <- code_precinct %>%
   mutate(data = map(data, clean_varnames))
 
-code_precinct <- clean_varnames(code_precinct)
+code_precinct <- krvote::clean_varnames(code_precinct)
 
 ### 3.4.2. 내보내기 -------------------
 
@@ -245,7 +245,7 @@ test_that("중앙선거관리위원회 구시군 코드 단위테스트", {
 code_gusigun <- code_gusigun %>%
   mutate(data = map(data, clean_varnames))
 
-code_gusigun <- clean_varnames(code_gusigun)
+code_gusigun <- krvote::clean_varnames(code_gusigun)
 
 ### 4.4.2. 내보내기 -------------------
 

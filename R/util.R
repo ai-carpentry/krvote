@@ -1,3 +1,29 @@
+
+#' clean_varnames
+#'
+#' @description 데이터 팩키지 변수명 한글깨짐 문제 윈도우 혹은 맥 해결
+#'
+#' @param raw_data dataframe or tibble
+#'
+#' @return robust unicoded dataframe or tibble
+#' @export
+#'
+clean_varnames <- function(raw_data) {
+
+  varnames <- names( raw_data )
+
+  varnames_unicode <- map_chr(varnames, stringi::stri_escape_unicode )
+
+  varnames_unicode_to_korean <- map_chr(varnames_unicode, stringi::stri_unescape_unicode)
+
+  unicode_data <- raw_data %>%
+    set_names(varnames_unicode_to_korean)
+
+  unicode_data
+}
+
+
+
 # # 0. 패키지 ---------------------------
 # library(tidyverse)
 # library(bannerCommenter)
@@ -11,10 +37,9 @@
 # copy_to_clipboard(banner_txt)
 #
 #
-# banner_txt <- copy_to_clipboard(banner("제19대 대통령",
-#                                        numLines = 1,
-#                                        bandChar = "-"))
-# copy_to_clipboard(banner_txt)
+bannerCommenter::copy_to_clipboard(bannerCommenter::banner("시도별 선거인수",
+                                       numLines = 1,
+                                       bandChar = "-"))
 #
 # ## 1.2. 데이터프레임 문서화
 #
@@ -28,4 +53,4 @@
 # bannerCommenter::copy_to_clipboard(banner_txt)
 #
 #
-# sinew::makeOxygen(code_gusigun, add_fields = "source")
+# sinew::makeOxygen(voter_precinct, add_fields = "source")

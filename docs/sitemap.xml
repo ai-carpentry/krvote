@@ -46,6 +46,9 @@
     <loc>/reference/election_20170509.html</loc>
   </url>
   <url>
+    <loc>/reference/election_20220309.html</loc>
+  </url>
+  <url>
     <loc>/reference/election_code.html</loc>
   </url>
   <url>
@@ -74,6 +77,9 @@
   </url>
   <url>
     <loc>/reference/make_dataframe_clean.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nec_sgg_code.html</loc>
   </url>
   <url>
     <loc>/reference/voter_emd.html</loc>

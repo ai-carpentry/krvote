@@ -1,7 +1,7 @@
 Package: krvote
 Type: Package
 Title: Korean Election Data
-Version: 0.3.0
+Version: 0.5.0
 Author: Kwangchun (Victor) Lee
 Maintainer: The package maintainer <kwangchun.lee.7@gmail.com>
 Description: It's all about Korean election data. 

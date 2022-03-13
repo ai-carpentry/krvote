@@ -49,10 +49,22 @@
     <loc>/reference/election_code.html</loc>
   </url>
   <url>
+    <loc>/reference/general_2012.html</loc>
+  </url>
+  <url>
+    <loc>/reference/general_2016.html</loc>
+  </url>
+  <url>
+    <loc>/reference/general_2020.html</loc>
+  </url>
+  <url>
     <loc>/reference/hello.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/make_dataframe_clean.html</loc>
   </url>
   <url>
     <loc>/reference/voter_emd.html</loc>

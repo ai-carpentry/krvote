@@ -250,6 +250,3 @@ general_2020 <- general_2020 %>%
 
 usethis::use_data(general_2020, overwrite = TRUE)
 
-
-
-

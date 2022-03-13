@@ -22,6 +22,24 @@ clean_varnames <- function(raw_data) {
   unicode_data
 }
 
+#' make_dataframe_clean
+#'
+#' @description 국회의원선거 wide 형태를 unnest 가능한 long 형태 변환
+#'
+#' @param raw_data dataframe or tibble
+#'
+#' @return clean dataframe
+#' @export
+#'
+make_dataframe_clean <- function(raw_df) {
+
+  clean_df <- raw_df %>%
+    pivot_longer(선거인수:기권수, names_to = "구분", values_to="사람수") %>%
+    mutate(사람수 = parse_number(사람수),
+              구분 = str_replace(구분, "\n", " "))
+
+  clean_df
+}
 
 
 # # 0. 패키지 ---------------------------
@@ -53,4 +71,4 @@ bannerCommenter::copy_to_clipboard(bannerCommenter::banner("시도별 선거인�
 # bannerCommenter::copy_to_clipboard(banner_txt)
 #
 #
-# sinew::makeOxygen(general_2020, add_fields = "source")
+# sinew::makeOxygen(general_2012, add_fields = "source")

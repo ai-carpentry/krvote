@@ -3,7 +3,7 @@
 \docType{data}
 \name{general_2012}
 \alias{general_2012}
-\title{제20대 국회의원선거}
+\title{제19대 국회의원선거}
 \format{
 A data frame with 313 rows and 3 variables:
 \describe{

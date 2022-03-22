@@ -61,7 +61,18 @@
 
 
 # 2. 제6회 지방선거 -------
-## 2.1. 제6회 지선 - 구시군의장 -------
+## 2.1. 제6회 지선 - 시도지사 -------
+#' @title 제6회 지방선거 - 지도지사
+#' @description 20140604 지방선거 시도지사
+#' @format A data frame with 17 rows and 2 variables:
+#' \describe{
+#'   \item{\code{시도명}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{data}}{list COLUMN_DESCRIPTION}
+#'}
+#' @source \url{https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=14979}
+"local_sido_20140604"
+
+## 2.2. 제6회 지선 - 구시군의장 -------
 #' @title 제6회 지방선거 - 구시군의장
 #' @description 20140604 지방선거 구시군의장
 #' @format A data frame with 17 rows and 2 variables:

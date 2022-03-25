@@ -63,7 +63,9 @@ clean_sgg_data <- function(gusigun, precinct, raw_data) {
 
 
 sgg_gg_tbl <- sgg_gg_xls_raw %>%
-  mutate(data = pmap(list(구시군, 선거구, data), clean_sgg_data))
+  mutate(data = pmap(list(구시군, 선거구, data), clean_sgg_data)) %>%
+  mutate(시도명 = "경기도") %>%
+  relocate(시도명, .before = 구시군)
 
 ## 1.3. 단위테스트 검증 -------------
 
@@ -110,5 +112,85 @@ list_names <- names(local_sgg_20140604) %>%
 names(local_sgg_20140604) <- list_names
 
 usethis::use_data(local_sgg_20140604, overwrite = TRUE)
+
+# 2. 서울특별시 ---------------------------
+## 2.1. 데이터 가져오기 ---------------------------
+sgg_seoul_xls_path <- "../../docs/krvotes/data-raw/제6회_전국동시지방선거_2014/제6회 전국동시지방선거 읍면동별 개표자료(서울)/02_구시군장/"
+
+sgg_seoul_xls_path_files <- list.files(sgg_seoul_xls_path, full.names = TRUE, recursive = TRUE)
+
+
+sgg_seoul_xls_raw <- tibble(filepath = sgg_seoul_xls_path_files) %>%
+  mutate(data = map(filepath, readxl::read_excel, skip = 3) ) %>%
+  separate(filepath, into = c("trash", "엑셀파일"), sep = "/02_구시군장/") %>%
+  select(-trash) %>%
+  mutate(엑셀파일 = str_remove(엑셀파일, "\\.xls")) %>%
+  mutate(구시군명 = str_extract(엑셀파일, "[가-힣]+")) %>%
+  mutate(시도명 = "서울특별시") %>%
+  select(시도명, 구시군명, data)
+
+## 2.2. 데이터 정제 ---------------------------
+
+clean_gu_2014_data <- function(raw_data) {
+
+  raw_data <- raw_data %>%
+    janitor::clean_names(ascii = FALSE)
+
+  candidate_names <- raw_data %>%
+    select(!starts_with("x")) %>%
+    names(.)
+
+  column_names <- c("읍면동명", "구분", "선거인수", "투표수", candidate_names, "무표투표수", "기권수")
+
+  clean_data <- raw_data %>%
+    set_names(column_names) %>%
+    mutate(구분 = ifelse(is.na(구분), 읍면동명, 구분)) %>%
+    filter(읍면동명 != "합계",
+               구분 != "소계") %>%
+    mutate(across(선거인수:기권수, as.character)) %>%
+    pivot_longer(선거인수:기권수, names_to = "후보", values_to = "득표수") %>%
+    mutate(득표수 = parse_number(득표수))
+
+  clean_data
+}
+
+sgg_seoul_tbl <- sgg_seoul_xls_raw %>%
+  mutate(data = map(data, clean_gu_2014_data))
+
+## 2.3. 단위테스트 검증 -------------
+
+test_that("지선 2014 구시군의장 득표검증", {
+
+  sgg_seoul_unit_test <- sgg_seoul_tbl %>%
+    filter(str_detect(구시군명, "강남구")) %>%
+    unnest(data) %>%
+    group_by(후보) %>%
+    summarise(득표수 = sum(득표수))
+
+
+
+  ## 투표율
+  expect_that( sgg_seoul_unit_test %>% filter(후보 == "새누리당_신연희") %>% pull(득표수), equals( parse_number("163,037")) )
+  expect_that( sgg_seoul_unit_test %>% filter(후보 == "새정치민주연합_김명신") %>% pull(득표수), equals( parse_number("94,164")) )
+})
+
+
+## 2.4. 내보내기 -------------------
+
+local_sgg_20140604 <- list( meta = list(
+  title =  stringi::stri_escape_unicode("제6회 지방선거 - 구시군의장") %>% stringi::stri_unescape_unicode(.),
+  data  = stringi::stri_escape_unicode("투표구별 투표, 투표구/후보별 득표") %>% stringi::stri_unescape_unicode(.) ),
+  경기도 = sgg_gg_tbl,
+  서울특별시 = sgg_seoul_tbl)
+
+list_names <- names(local_sgg_20140604) %>%
+  stringi::stri_escape_unicode(.) %>%
+  stringi::stri_unescape_unicode(.)
+
+names(local_sgg_20140604) <- list_names
+
+usethis::use_data(local_sgg_20140604, overwrite = TRUE)
+
+
 
 

@@ -8,7 +8,7 @@
 A data frame with 17 rows and 2 variables:
 \describe{
 \item{\code{시도명}}{character COLUMN_DESCRIPTION}
-\item{\code{data}}{list COLUMN_DESCRIPTION}
+\item{\code{data}}{list 경기도, 서울특별시}
 }
 }
 \source{

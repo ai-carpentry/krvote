@@ -20,3 +20,40 @@
 "education_2018"
 
 
+#' @title 제6회 교육감선거
+#' @description 시도 교육감
+#' @format A data frame with 58802 rows and 10 variables:
+#' \describe{
+#'   \item{\code{시도명}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{구시군}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{읍면동명}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{구분}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{선거인수}}{double COLUMN_DESCRIPTION}
+#'   \item{\code{투표수}}{double COLUMN_DESCRIPTION}
+#'   \item{\code{무효투표수}}{double COLUMN_DESCRIPTION}
+#'   \item{\code{기권수}}{double COLUMN_DESCRIPTION}
+#'   \item{\code{후보}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{득표수}}{double COLUMN_DESCRIPTION}
+#'}
+#' @source \url{http://info.nec.go.kr/main/main_load.xhtml}
+#' @details 제6회 시도 교육감
+"education_2014"
+
+#' @title 제5회 시도 교육감
+#' @description 시도 교육감
+#' @format A data frame with 42874 rows and 9 variables:
+#' \describe{
+#'   \item{\code{시도명}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{구시군}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{읍면동명}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{선거인수}}{double COLUMN_DESCRIPTION}
+#'   \item{\code{투표수}}{double COLUMN_DESCRIPTION}
+#'   \item{\code{무효투표수}}{double COLUMN_DESCRIPTION}
+#'   \item{\code{기권수}}{double COLUMN_DESCRIPTION}
+#'   \item{\code{후보}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{득표수}}{double COLUMN_DESCRIPTION}
+#'}
+#' @details DETAILS
+"education_2010"
+
+

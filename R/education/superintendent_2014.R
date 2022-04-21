@@ -1,6 +1,6 @@
 
 ################################################################# ---
-##                 NEC 투개표 : 교육감 (2018)                  ##
+##                 NEC 투개표 : 교육감 (2014)                  ##
 ##                    개발자: 이광춘                           ##
 ##                최종수정일: 2022-04-21                       ##
 ################################################################# ---
@@ -15,6 +15,8 @@ library(here)
 library(httr)
 library(rvest)
 
+# electionName: 20140604 변수명만 다름
+
 nec_url <- glue::glue("http://info.nec.go.kr/electioninfo/electionInfo_report.xhtml?",
                        "electionId=0000000000",
                        "&requestURI=%2FWEB-INF%2Fjsp%2Felectioninfo%2F0000000000%2Fvc%2Fvccp04.jsp",
@@ -24,7 +26,7 @@ nec_url <- glue::glue("http://info.nec.go.kr/electioninfo/electionInfo_report.xh
                        "&statementId=VCCP04_%232",
                        "&oldElectionType=1",
                        "&electionType=4",
-                       "&electionName=20180613",
+                       "&electionName=20140604",
                        "&electionCode=11",
                        "&cityCode=1100",
                        "&sggCityCode=-1",
@@ -93,7 +95,7 @@ get_eduction_raw_data <- function(cityCode = "1100", townCode="1101") {
                         "&statementId=VCCP04_%232",
                         "&oldElectionType=1",
                         "&electionType=4",
-                        "&electionName=20180613",
+                        "&electionName=20140604",
                         "&electionCode=11",
                         "&cityCode={cityCode}",
                         "&sggCityCode=-1",
@@ -149,18 +151,18 @@ get_eduction_raw_data("1100", "1102")
 
 # 3. 마스터 데이터 크롤링 ----------------------
 
-education_2018_raw <- krvote::nec_sgg_code %>%
+education_2014_raw <- krvote::nec_sgg_code %>%
   unnest(data) %>%
   mutate(data = map2(시도코드, 구시군코드, safely(get_eduction_raw_data, otherwise = "error")) )
 
 # 4. 데이터 정제작업 ----------------------
 
-education_2018_raw %>%
+education_2014_raw %>%
   mutate(result = map(data, "result")) %>%
   mutate(error = map_lgl(result, is.data.frame) ) %>%
   count(error)
 
-education_2018 <- education_2018_raw %>%
+education_2014 <- education_2014_raw %>%
   mutate(result = map(data, "result")) %>%
   select(시도명, 구시군, result) %>%
   mutate(data = map(result, ~ .x %>% pivot_longer( contains("후보"),
@@ -170,13 +172,18 @@ education_2018 <- education_2018_raw %>%
   unnest(data) %>%
   mutate(across(c(선거인수, 투표수, 무효투표수, 기권수, 득표수), parse_number))
 
-education_2018
+education_2014 %>%
+  filter(시도명 == "서울특별시", 읍면동명 == "합계") %>%
+  group_by(후보) %>%
+  summarise( 득표수 = sum(득표수) )
 
 
 ## 5. 내보내기 ---------------------
 
-education_2018 <- krvote::clean_varnames(education_2018)
+education_2014 <- krvote::clean_varnames(education_2014)
 
-usethis::use_data(education_2018, overwrite = TRUE)
+usethis::use_data(education_2014, overwrite = TRUE)
 
-# sinew::makeOxygen(education_2018)
+# sinew::makeOxygen(education_2014)
+
+

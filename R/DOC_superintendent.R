@@ -53,7 +53,8 @@
 #'   \item{\code{후보}}{character COLUMN_DESCRIPTION}
 #'   \item{\code{득표수}}{double COLUMN_DESCRIPTION}
 #'}
-#' @details DETAILS
+#' @source \url{http://info.nec.go.kr/main/main_load.xhtml}
+#' @details 제5회 시도 교육감
 "education_2010"
 
 

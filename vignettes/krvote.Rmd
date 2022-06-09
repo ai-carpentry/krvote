@@ -1,0 +1,43 @@
+---
+title: "좋빠가"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{선거 데이터}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(tidyverse)
+```
+
+```{r setup}
+library(krvote)
+```
+
+# `krvote` 데이터
+
+`krvote` 데이터 패키지에 포함된 데이터셋을 `reactable` 팩키지를 통해 일별하고 
+필요한 경우 검색 필터링 가능하다.
+
+```{r krvote-dataset}
+# remotes::install_github("ai-carpentry/krvote")
+library(tidyverse)
+library(krvote)
+
+krvote_dat <- data(package = "krvote")
+
+krvote_dat$results %>% 
+  as_tibble() %>% 
+  select(데이터셋 = Item, 데이터설명 = Title) %>% 
+  reactable::reactable(filterable = TRUE)
+
+```
+

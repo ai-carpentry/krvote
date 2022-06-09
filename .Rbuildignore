@@ -5,3 +5,7 @@
 ^pkgdown$
 ^doc$
 ^Meta$
+
+data_clean\
+
+^LICENSE\.md$

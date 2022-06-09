@@ -1,11 +1,14 @@
 Package: krvote
 Type: Package
-Title: Korean Election Data
-Version: 0.6.0
-Author: Kwangchun (Victor) Lee
-Maintainer: The package maintainer <kwangchun.lee.7@gmail.com>
+Title: 대한민국 선거 데이터
+Version: 0.7.0
+Authors@R: c(
+  person("Kwangchun", "lee",, "kwangchun.lee.7@gmail.com", role = c("aut", "cre")),
+  person(given = "bitR", role = c("cph"))
+  )
+Maintainer: Kwangchun Lee <victor@r2bit.com>
 Description: It's all about Korean election data. 
-License: MIT + file LICENSE
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

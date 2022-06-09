@@ -14,17 +14,103 @@ library(here)
 library(httr)
 library(rvest)
 
+##---------------------------------------------------------------- --
+##                     제18대 대통령                            --
+##---------------------------------------------------------------- --
+
+# 1. 제18대 대통령 -----------------------------------------------
+
+## 1.1. 원본데이터 가져오기 -------------
+
+election_20121219_xlsx <- read_excel("inst/extdata/president/제18대선-투표구별개표자료.xlsx", sheet="대통령", skip=2) %>%
+  janitor::clean_names(ascii = FALSE)
+
+## 1.2. 데이터 정제작업 -------------
+
+election_20121219_tbl <- election_20121219_xlsx %>%
+  set_names(c("시도명", "구시군명", "읍면동명", "투표구명", "선거인수", "투표수",
+              "박근혜", "문재인", "박종선", "김소연", "강지원", "김순자",
+              "계", "무효투표수", "기권수")) %>%
+  filter(! 시도명 %in% c("전국", "시도명") )  %>%
+  filter(`구시군명` != "합계") %>%
+  fill(읍면동명, .direction = "down") %>%
+  filter(`읍면동명` != "소계") %>%
+  mutate(`투표구명` = ifelse(is.na(투표구명), `읍면동명`, `투표구명`)) %>%
+  filter(투표구명 != "소계") %>%
+  ## 자료형 변환
+  mutate(across(선거인수:기권수, as.numeric))
+
+
+### 1.2.1. 투표율 ------------------------------------
+election_20121219_casting <- election_20121219_tbl %>%
+  select(시도명, 구시군명, 읍면동명, 투표구명, 선거인수, 투표수, 무효투표수, 기권수)
+
+### 1.2.2. 득표율 ------------------------------------
+
+election_20121219_voting <- election_20121219_tbl %>%
+  select(시도명, 구시군명, 읍면동명, 투표구명, 선거인수, 투표수:계)
+
+
+## 1.3. 단위테스트 검증 -------------
+
+test_that("대선 2012 후보득표검증", {
+
+  election_20121219_casting_unit_test <- election_20121219_casting %>%
+    summarise(선거인수 = sum(선거인수),
+                  투표수   = sum(투표수),
+                  무효투표수 = sum(무효투표수))
+
+
+  election_20121219_voting_unit_test <- election_20121219_voting %>%
+    summarise(박근혜 = sum(박근혜),
+                 문재인 = sum(문재인))
+
+  ## 투표율
+  expect_that( election_20121219_casting_unit_test %>% pull(선거인수), equals( parse_number("40,507,842 ")) )
+  expect_that( election_20121219_casting_unit_test %>% pull(투표수), equals( parse_number("30,721,459")) )
+  expect_that( election_20121219_casting_unit_test %>% pull(무효투표수), equals( parse_number("126,838")) )
+
+  ## 득표율
+  expect_that( election_20121219_voting_unit_test$박근혜, equals( 15773128 ))
+  expect_that( election_20121219_voting_unit_test$문재인, equals( 14692632 ))
+})
+
+
+## 1.4. 데이터 내보내기 -------------
+### 1.4.1. 인코딩 -------------------
+
+
+election_20121219_casting <- clean_varnames(election_20121219_casting)
+election_20121219_voting  <- clean_varnames(election_20121219_voting)
+
+### 1.4.2. 내보내기 -------------------
+
+election_20121219 <- list( meta = list(
+  title =  stringi::stri_escape_unicode("제18대 대통령선거") %>% stringi::stri_unescape_unicode(.),
+  data  = stringi::stri_escape_unicode("투표구별 투표, 투표구/후보별 득표") %>% stringi::stri_unescape_unicode(.) ),
+  투표율 = election_20121219_casting,
+  득표율 = election_20121219_voting )
+
+list_names_20121219 <- names(election_20121219) %>%
+  stringi::stri_escape_unicode(.) %>%
+  stringi::stri_unescape_unicode(.)
+
+names(election_20121219) <- list_names_20121219
+
+usethis::use_data(election_20121219, overwrite = TRUE)
+
+
 ##---------------------------------------------------------------- ---
 ##                      제19대 대통령                           --
 ##---------------------------------------------------------------- ---
-# 1. 제19대 대통령 -----------------------------------------------
+# 2. 제19대 대통령 -----------------------------------------------
 
-## 1.1. 원본데이터 가져오기 -------------
+## 2.1. 원본데이터 가져오기 -------------
 
 election_20170509_xlsx <- read_excel("inst/extdata/president/제19대선-투표구별개표자료.xlsx", sheet="19대선", skip=1) %>%
   janitor::clean_names(ascii = FALSE)
 
-## 1.2. 데이터 정제작업 -------------
+## 2.2. 데이터 정제작업 -------------
 
 election_20170509_tbl <- election_20170509_xlsx %>%
   set_names(c("x1", "x2", "x3", "x4", "x5", "x6", "더불어민주당_문재인",
@@ -66,7 +152,7 @@ election_20170509_voting <- election_20170509_tbl %>%
   select(시도명, 구시군명, 읍면동명, 투표구명, 선거인수, 투표수:계)
 
 
-## 1.3. 단위테스트 검증 -------------
+## 2.3. 단위테스트 검증 -------------
 
 test_that("대선 2017 후보득표검증", {
 
@@ -98,8 +184,8 @@ test_that("대선 2017 후보득표검증", {
 })
 
 
-## 1.4. 데이터 내보내기 -------------
-### 1.4.1. 인코딩 -------------------
+## 2.4. 데이터 내보내기 -------------
+### 2.4.1. 인코딩 -------------------
 
 clean_varnames <- function(raw_data) {
 
@@ -117,7 +203,7 @@ clean_varnames <- function(raw_data) {
 election_20170509_casting <- clean_varnames(election_20170509_casting)
 election_20170509_voting  <- clean_varnames(election_20170509_voting)
 
-### 1.4.2. 내보내기 -------------------
+### 2.4.2. 내보내기 -------------------
 
 election_20170509 <- list( meta = list(
   title =  stringi::stri_escape_unicode("제19대 대통령선거") %>% stringi::stri_unescape_unicode(.),
@@ -135,90 +221,6 @@ usethis::use_data(election_20170509, overwrite = TRUE)
 
 
 
-##---------------------------------------------------------------- --
-##                     제18대 대통령                            --
-##---------------------------------------------------------------- --
-
-# 2. 제18대 대통령 -----------------------------------------------
-
-## 2.1. 원본데이터 가져오기 -------------
-
-election_20121219_xlsx <- read_excel("inst/extdata/president/제18대선-투표구별개표자료.xlsx", sheet="대통령", skip=2) %>%
-  janitor::clean_names(ascii = FALSE)
-
-## 2.2. 데이터 정제작업 -------------
-
-election_20121219_tbl <- election_20121219_xlsx %>%
-  set_names(c("시도명", "구시군명", "읍면동명", "투표구명", "선거인수", "투표수",
-              "박근혜", "문재인", "박종선", "김소연", "강지원", "김순자",
-              "계", "무효투표수", "기권수")) %>%
-  filter(! 시도명 %in% c("전국", "시도명") )  %>%
-  filter(`구시군명` != "합계") %>%
-  fill(읍면동명, .direction = "down") %>%
-  filter(`읍면동명` != "소계") %>%
-  mutate(`투표구명` = ifelse(is.na(투표구명), `읍면동명`, `투표구명`)) %>%
-  filter(투표구명 != "소계") %>%
-  ## 자료형 변환
-  mutate(across(선거인수:기권수, as.numeric))
-
-
-## 2.1. 투표율 ------------------------------------
-election_20121219_casting <- election_20121219_tbl %>%
-  select(시도명, 구시군명, 읍면동명, 투표구명, 선거인수, 투표수, 무효투표수, 기권수)
-
-## 2.2. 득표율 ------------------------------------
-
-election_20121219_voting <- election_20121219_tbl %>%
-  select(시도명, 구시군명, 읍면동명, 투표구명, 선거인수, 투표수:계)
-
-
-## 2.3. 단위테스트 검증 -------------
-
-test_that("대선 2012 후보득표검증", {
-
-  election_20121219_casting_unit_test <- election_20121219_casting %>%
-    summarise(선거인수 = sum(선거인수),
-                  투표수   = sum(투표수),
-                  무효투표수 = sum(무효투표수))
-
-
-  election_20121219_voting_unit_test <- election_20121219_voting %>%
-    summarise(박근혜 = sum(박근혜),
-              문재인 = sum(문재인))
-
-  ## 투표율
-  expect_that( election_20121219_casting_unit_test %>% pull(선거인수), equals( parse_number("40,507,842 ")) )
-  expect_that( election_20121219_casting_unit_test %>% pull(투표수), equals( parse_number("30,721,459")) )
-  expect_that( election_20121219_casting_unit_test %>% pull(무효투표수), equals( parse_number("126,838")) )
-
-  ## 득표율
-  expect_that( election_20121219_voting_unit_test$박근혜, equals( 15773128 ))
-  expect_that( election_20121219_voting_unit_test$문재인, equals( 14692632 ))
-})
-
-
-## 2.4. 데이터 내보내기 -------------
-### 2.4.1. 인코딩 -------------------
-
-
-election_20121219_casting <- clean_varnames(election_20121219_casting)
-election_20121219_voting  <- clean_varnames(election_20121219_voting)
-
-### 2.4.2. 내보내기 -------------------
-
-election_20121219 <- list( meta = list(
-  title =  stringi::stri_escape_unicode("제18대 대통령선거") %>% stringi::stri_unescape_unicode(.),
-  data  = stringi::stri_escape_unicode("투표구별 투표, 투표구/후보별 득표") %>% stringi::stri_unescape_unicode(.) ),
-  투표율 = election_20121219_casting,
-  득표율 = election_20121219_voting )
-
-list_names_20121219 <- names(election_20121219) %>%
-  stringi::stri_escape_unicode(.) %>%
-  stringi::stri_unescape_unicode(.)
-
-names(election_20121219) <- list_names_20121219
-
-usethis::use_data(election_20121219, overwrite = TRUE)
 
 
 ##---------------------------------------------------------------- ---

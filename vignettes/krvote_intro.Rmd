@@ -19,6 +19,7 @@ library(tidyverse)
 ```
 
 ```{r setup}
+# remotes::install_github("ai-carpentry/krvote")
 library(krvote)
 ```
 

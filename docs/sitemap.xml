@@ -1,114 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/404.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/articles/index.html</loc>
   </url>
   <url>
-    <loc>/articles/intro_to_vote_data.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/articles/intro_to_vote_data.html</loc>
   </url>
   <url>
-    <loc>/articles/krvote_intro.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/articles/krvote.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/articles/krvote_intro.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/authors.html</loc>
   </url>
   <url>
-    <loc>/reference/casting_votes.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/index.html</loc>
   </url>
   <url>
-    <loc>/reference/clean_varnames.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/reference/code_election.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/code_gusigun.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/by_election_2021.html</loc>
   </url>
   <url>
-    <loc>/reference/code_party.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/casting_votes.html</loc>
   </url>
   <url>
-    <loc>/reference/code_precinct.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/clean_varnames.html</loc>
   </url>
   <url>
-    <loc>/reference/counting_votes.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/code_election.html</loc>
   </url>
   <url>
-    <loc>/reference/early_voting.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/code_gusigun.html</loc>
   </url>
   <url>
-    <loc>/reference/education_2018.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/code_party.html</loc>
   </url>
   <url>
-    <loc>/reference/election_20121219.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/code_precinct.html</loc>
   </url>
   <url>
-    <loc>/reference/election_20170509.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/counting_votes.html</loc>
   </url>
   <url>
-    <loc>/reference/election_20220309.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/early_voting.html</loc>
   </url>
   <url>
-    <loc>/reference/election_code.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/education_2010.html</loc>
   </url>
   <url>
-    <loc>/reference/general_2012.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/education_2014.html</loc>
   </url>
   <url>
-    <loc>/reference/general_2016.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/education_2018.html</loc>
   </url>
   <url>
-    <loc>/reference/general_2020.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/election_20121219.html</loc>
   </url>
   <url>
-    <loc>/reference/hello.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/election_20170509.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/election_20220309.html</loc>
   </url>
   <url>
-    <loc>/reference/local_edu_gg_20140604.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/election_code.html</loc>
   </url>
   <url>
-    <loc>/reference/local_edu_seoul_20140604.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/general_2012.html</loc>
   </url>
   <url>
-    <loc>/reference/local_sgg_20140604.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/general_2016.html</loc>
   </url>
   <url>
-    <loc>/reference/local_sgg_20180613.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/general_2020.html</loc>
   </url>
   <url>
-    <loc>/reference/local_sido_20140604.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/hello.html</loc>
   </url>
   <url>
-    <loc>/reference/local_sido_20180613.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/make_dataframe_clean.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/local_edu_gg_20140604.html</loc>
   </url>
   <url>
-    <loc>/reference/nec_sgg_code.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/local_edu_seoul_20140604.html</loc>
   </url>
   <url>
-    <loc>/reference/voter_emd.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/local_sgg_20140604.html</loc>
   </url>
   <url>
-    <loc>/reference/voter_gusigun.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/local_sgg_20180613.html</loc>
   </url>
   <url>
-    <loc>/reference/voter_precinct.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/local_sido_20140604.html</loc>
   </url>
   <url>
-    <loc>/reference/voter_sido.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/local_sido_20180613.html</loc>
   </url>
   <url>
-    <loc>/reference/voter_station.html</loc>
+    <loc>https://ai-carpentry.github.io/krvote/reference/make_dataframe_clean.html</loc>
+  </url>
+  <url>
+    <loc>https://ai-carpentry.github.io/krvote/reference/nec_sgg_code.html</loc>
+  </url>
+  <url>
+    <loc>https://ai-carpentry.github.io/krvote/reference/voter_emd.html</loc>
+  </url>
+  <url>
+    <loc>https://ai-carpentry.github.io/krvote/reference/voter_gusigun.html</loc>
+  </url>
+  <url>
+    <loc>https://ai-carpentry.github.io/krvote/reference/voter_precinct.html</loc>
+  </url>
+  <url>
+    <loc>https://ai-carpentry.github.io/krvote/reference/voter_sido.html</loc>
+  </url>
+  <url>
+    <loc>https://ai-carpentry.github.io/krvote/reference/voter_station.html</loc>
   </url>
 </urlset>

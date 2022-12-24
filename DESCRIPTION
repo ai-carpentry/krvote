@@ -1,26 +1,19 @@
 Package: krvote
 Type: Package
-Title: 대한민국 선거 데이터
-Version: 0.7.0
-Authors@R: c(
-  person("Kwangchun", "lee",, "kwangchun.lee.7@gmail.com", role = c("aut", "cre")),
-  person(given = "bitR", role = c("cph"))
-  )
+Title: Korean Election Datasets
+Version: 0.7.0.9000
+Authors@R: person("Kwangchun", "lee",, "kwangchun.lee.7@gmail.com", role = c("aut", "cre"))
 Maintainer: Kwangchun Lee <victor@r2bit.com>
-Description: It's all about Korean election data. 
-License: GPL (>= 3)
+Description: It is all about Korean election data
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
-Depends:
-    R (>= 2.10)
+RoxygenNote: 7.2.2
+Depends: R (>= 2.13.0)
 Imports: 
-    tibble,
-    crayon
-URL: https://github.com/ai-carpentry/krvote
-BugReports: https://github.com/ai-carpentry/krvote/issues
+  tibble,
+  crayon
 Suggests: 
-    knitr,
-    rmarkdown
+  knitr,
+  rmarkdown
 VignetteBuilder: knitr

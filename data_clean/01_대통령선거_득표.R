@@ -2,7 +2,7 @@
 ################################################################# ---
 ##              대통령선거 투표 데이터                         ##
 ##                    개발자: 이광춘                           ##
-##                최종수정일: 2022-03-11                       ##
+##                최종수정일: 2022-12-24                       ##
 ################################################################# ---
 ## 데이터 출처: https://bit.ly/2QRqyGQ
 
@@ -13,6 +13,8 @@ library(testthat)
 library(here)
 library(httr)
 library(rvest)
+
+# source("R/util.R")
 
 ##---------------------------------------------------------------- --
 ##                     제18대 대통령                            --
@@ -104,7 +106,6 @@ usethis::use_data(election_20121219, overwrite = TRUE)
 ##                      제19대 대통령                           --
 ##---------------------------------------------------------------- ---
 # 2. 제19대 대통령 -----------------------------------------------
-
 ## 2.1. 원본데이터 가져오기 -------------
 
 election_20170509_xlsx <- read_excel("inst/extdata/president/제19대선-투표구별개표자료.xlsx", sheet="19대선", skip=1) %>%
@@ -187,18 +188,18 @@ test_that("대선 2017 후보득표검증", {
 ## 2.4. 데이터 내보내기 -------------
 ### 2.4.1. 인코딩 -------------------
 
-clean_varnames <- function(raw_data) {
-
-  varnames <- names( raw_data )
-
-  varnames_unicode <- map_chr(varnames, stringi::stri_escape_unicode )
-
-  varnames_unicode_to_korean <- map_chr(varnames_unicode, stringi::stri_unescape_unicode)
-
-  unicode_data <- raw_data %>%
-    set_names(varnames_unicode_to_korean)
-
-}
+# clean_varnames <- function(raw_data) {
+#
+#   varnames <- names( raw_data )
+#
+#   varnames_unicode <- map_chr(varnames, stringi::stri_escape_unicode )
+#
+#   varnames_unicode_to_korean <- map_chr(varnames_unicode, stringi::stri_unescape_unicode)
+#
+#   unicode_data <- raw_data %>%
+#     set_names(varnames_unicode_to_korean)
+#
+# }
 
 election_20170509_casting <- clean_varnames(election_20170509_casting)
 election_20170509_voting  <- clean_varnames(election_20170509_voting)
@@ -221,122 +222,55 @@ usethis::use_data(election_20170509, overwrite = TRUE)
 
 
 
-
-
 ##---------------------------------------------------------------- ---
 ##                      제20대 대통령                           --
 ##---------------------------------------------------------------- ---
 # 3. 제20대 대통령 -----------------------------------------------
-## 3.1. 스크립트 -------------------------------------------------
-### 데이터 가져오기
-presid_20_request <- glue::glue("http://info.nec.go.kr/electioninfo/electionInfo_report.xhtml?",
-           "electionId=0020220309&requestURI=%2FWEB-INF%2Fjsp%2Felectioninfo%2F0020220309%2Fvc%2Fvccp08.jsp&topMenuId=VC&secondMenuId=VCCP08&menuId=VCCP08&statementId=VCCP08_%231&electionCode=1&cityCode=1100&sggCityCode=-1&townCodeFromSgg=-1&townCode=1101&sggTownCode=-1&checkCityCode=-1&x=55&y=18")
+## 3.1. 원본데이터 가져오기 -------------
 
-Sys.setlocale("LC_ALL", "C")
-presid_20_resp <- GET(presid_20_request) %>%
-  content(as="text") %>%
-  rvest::read_html()
+election_20220309_xlsx <- read_excel("inst/extdata/president/제20대 대통령선거 개표자료.xlsx", sheet="Data", skip=1) %>%
+  janitor::clean_names(ascii = FALSE)
 
-presid_20_raw <- presid_20_resp %>%
-  html_elements(css ="#table01") %>%
-  html_table(fill = TRUE) %>%
-  .[[1]]
-Sys.setlocale("LC_ALL", "Korean")
+## 3.2. 데이터 정제작업 -------------
 
-### 데이터 정제
-
-presid_20_colnames <- presid_20_raw %>%
-  janitor::clean_names(ascii = FALSE) %>%
-  slice(1) %>%
-  unlist() %>%
-  as.character()
-
-
-presid_20_tbl <- presid_20_raw %>%
-  janitor::clean_names(ascii = FALSE) %>%
-  set_names(presid_20_colnames) %>%
-  mutate(읍면동명 = ifelse(읍면동명 == "", NA_character_, 읍면동명)) %>%
-  fill(읍면동명, .direction = "down") %>%
-  mutate(투표구명 = ifelse(투표구명 == "", 읍면동명, 투표구명)) %>%
-  slice(2:n()) %>%
-  mutate(across(선거인수:기권수, parse_number) )
-
-presid_20_tbl
-
-## 3.2. 함수 -------------------------------------------------
-
-get_president_2022 <- function(sido_code = "1100", sgg_code = "1101") {
-
-  cat("\n----------------------------------\n", sido_code, ":", sgg_code, "\n")
-
-  presid_20_request <- glue::glue("http://info.nec.go.kr/electioninfo/electionInfo_report.xhtml?",
-                                  "electionId=0020220309",
-                                  "&requestURI=%2FWEB-INF%2Fjsp%2Felectioninfo%2F0020220309%2Fvc%2Fvccp08.jsp",
-                                  "&topMenuId=VC",
-                                  "&secondMenuId=VCCP08",
-                                  "&menuId=VCCP08",
-                                  "&statementId=VCCP08_%231",
-                                  "&electionCode=1",
-                                  "&cityCode={sido_code}",
-                                  "&sggCityCode=-1",
-                                  "&townCodeFromSgg=-1",
-                                  "&townCode={sgg_code}",
-                                  "&sggTownCode=-1",
-                                  "&checkCityCode=-1&x=55&y=18")
-
-  Sys.setlocale("LC_ALL", "C")
-  presid_20_resp <- GET(presid_20_request) %>%
-    content(as="text") %>%
-    rvest::read_html()
-
-  presid_20_raw <- presid_20_resp %>%
-    html_elements(css ="#table01") %>%
-    html_table(fill = TRUE) %>%
-    .[[1]]
-  Sys.setlocale("LC_ALL", "Korean")
-
-  ### 데이터 정제
-
-  presid_20_colnames <- presid_20_raw %>%
-    janitor::clean_names(ascii = FALSE) %>%
-    slice(1) %>%
-    unlist() %>%
-    as.character()
+election_20220309_tbl <- election_20220309_xlsx %>%
+  set_names(c("시도", "구시군", "읍면동명", "투표구명", "선거인수",
+              "투표수", "더불어민주당_이재명", "국민의힘_윤석열",
+              "정의당_심상정", "기본소득당_오준호", "국가혁명당허경영",
+              "노동당_이백윤", "새누리당_옥은호", "신자유민주연합_김경재",
+              "우리공화당_조원진", "진보당_김재연", "통일한국당_이경희",
+              "한류연합당_김민찬", "계", "무효투표수", "기권수"
+  )) %>%
+  rename(이재명 = `더불어민주당_이재명`,
+         윤석열 = `국민의힘_윤석열`,
+         심상정 = `정의당_심상정`,
+         오준호 = `기본소득당_오준호`,
+         허경영 = `국가혁명당허경영`,
+         이백윤 = `노동당_이백윤`,
+         옥은호 = `새누리당_옥은호`,
+         김경재 = `신자유민주연합_김경재`,
+         조원진 = `우리공화당_조원진`,
+         김재연 = `진보당_김재연`,
+         이경희 = `통일한국당_이경희`,
+         김민찬 = `한류연합당_김민찬`,
+         시도명 = 시도,
+         구시군명 = 구시군) %>%
+  filter(`시도명` != "전국") %>%
+  filter(`구시군명` != "합계") %>%
+  filter(`읍면동명` != "합계") %>%
+  mutate(`투표구명` = ifelse(is.na(`투표구명`), `읍면동명`, `투표구명`)) %>% # because of NA
+  filter(`투표구명` != "합계") %>%
+  mutate(across(.cols = 선거인수:기권수, .fns = parse_number))
 
 
-  presid_20_tbl <- presid_20_raw %>%
-    janitor::clean_names(ascii = FALSE) %>%
-    set_names(presid_20_colnames) %>%
-    mutate(읍면동명 = ifelse(읍면동명 == "", NA_character_, 읍면동명)) %>%
-    fill(읍면동명, .direction = "down") %>%
-    mutate(투표구명 = ifelse(투표구명 == "", 읍면동명, 투표구명)) %>%
-    slice(2:n()) %>%
-    mutate(across(선거인수:기권수, parse_number) )
+### 3.1.1. 투표율 ------------------------------------
+election_20220309_casting <- election_20220309_tbl %>%
+  select(시도명, 구시군명, 읍면동명, 투표구명, 선거인수, 투표수, 무효투표수, 기권수)
 
-  presid_20_tbl
+### 3.1.2. 득표율 ------------------------------------
 
-}
-
-get_president_2022("1100", "1102")
-
-## 3.3. 가져오기 -------------------------------------------------
-
-election_20220309_raw <- krvote::nec_sgg_code %>%
-  unnest(data) %>%
-  mutate(data = map2(시도코드, 구시군코드, get_president_2022) ) %>%
-  unnest()
-
-### 3.3.1. 투표율 ------------------------------------
-election_20220309_casting <- election_20220309_raw %>%
-  filter(읍면동명 != "합계",
-         투표구명 != "소계") %>%
-  select(시도명, 구시군명=구시군, 읍면동명, 투표구명, 선거인수, 투표수, 무효투표수, 기권수)
-
-### 3.3.2. 득표율 ------------------------------------
-election_20220309_voting <- election_20220309_raw %>%
-  filter(읍면동명 != "합계",
-             투표구명 != "소계") %>%
-  select(시도명, 구시군명=구시군, 읍면동명, 투표구명, 선거인수, 투표수:계)
+election_20220309_voting <- election_20220309_tbl %>%
+  select(시도명, 구시군명, 읍면동명, 투표구명, 선거인수, 투표수:계)
 
 
 ## 3.4. 단위테스트 검증 -------------
@@ -350,8 +284,8 @@ test_that("대선 2022 후보득표검증", {
 
 
   election_20220309_voting_unit_test <- election_20220309_voting %>%
-    summarise(이재명 = sum(더불어민주당이재명),
-              윤석열 = sum(국민의힘윤석열))
+    summarise(이재명 = sum(이재명),
+              윤석열 = sum(윤석열))
 
   ## 투표율
   expect_that( election_20220309_casting_unit_test %>% pull(선거인수), equals( parse_number("44,197,692")) )
@@ -367,8 +301,8 @@ test_that("대선 2022 후보득표검증", {
 ## 3.4. 데이터 내보내기 -------------
 ### 3.4.1. 인코딩 -------------------
 
-election_20220309_casting <- krvote::clean_varnames(election_20220309_casting)
-election_20220309_voting  <- krvote::clean_varnames(election_20220309_voting)
+election_20220309_casting <- clean_varnames(election_20220309_casting)
+election_20220309_voting  <- clean_varnames(election_20220309_voting)
 
 ### 3.4.2. 내보내기 -------------------
 

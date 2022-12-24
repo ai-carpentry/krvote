@@ -1,0 +1,65 @@
+---
+title: "선거 데이터 사전"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{data_dictionary}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(krvote)
+```
+
+# 데이터 사전
+
+- 대선
+- 총선
+- 지선
+
+# 대통령 선거
+
+## 득표 데이터
+
+- [역대 대통령선거 개표결과(제14대 이후)](https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=14953)
+- [제20대 대통령선거](https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=175508)
+
+
+
+## 여론조사
+
+- [제20대 대통령선거 선거여론조사결과 추이자료 게시](https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=188078)
+- [제8회 지방선거 선거여론조사결과 추이자료 게시](https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=188079)
+
+# 총선
+
+## 득표 데이터
+
+- [제21대 국회의원선거 투표구별 개표결과 자료](https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=15052)
+- [제20대 국회의원선거 투표구별 개표결과 자료](https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=14879)
+- [제19대 국회의원선거 투표구별 개표결과 자료](https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=14314)
+-[제18대 국회의원선거 투표구별 개표결과 자료](https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=14260)
+-[제17대 국회의원선거 투표구별 개표결과 자료](https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=14288)
+-[제16대 국회의원선거 투표구별 개표결과 자료](https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=14288)
+
+# 지방선거
+
+## 득표 데이터
+
+- [제8회 전국동시지방선거 읍면동별 개표결과](https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=187608)
+- [역대 전국동시지방선거 개표결과(제3회 이후)](https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=14979)
+    - 제3회~6회 + 제7회
+
+
+    
+    
+    
+
+

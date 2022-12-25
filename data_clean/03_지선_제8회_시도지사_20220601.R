@@ -16,7 +16,7 @@ library(httr)
 ##---------------------------------------------------------------- --
 ##                    제8회 지방선거 시도지사 (2022)               --
 ##---------------------------------------------------------------- --
-# 출처: https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=14979
+# 출처: https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1129&bcIdx=187608
 # 1. 데이터 가져오기 ---------------------------
 local_sido_2022_excel <- read_excel("Z:/dataset/선거데이터/01_대선_총선_지선_데이터/03_지방선거/제8회_지선_2022/시도지사선거.xlsx", sheet="시·도지사선거", skip=0,
                              col_types = c(rep("text", 15)))

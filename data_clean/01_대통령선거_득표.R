@@ -320,3 +320,122 @@ names(election_20220309) <- list_names
 
 usethis::use_data(election_20220309, overwrite = TRUE)
 
+
+##---------------------------------------------------------------- ---
+##                      제17대 대통령                           --
+##---------------------------------------------------------------- ---
+# 4. 제17대 대통령 -----------------------------------------------
+## 4.1. 서울특별시 -----------------------------------------------
+
+sido_code <- "1100"
+
+presid_request <- glue::glue("http://info.nec.go.kr/electioninfo/electionInfo_report.xhtml?",
+                                "electionId=0000000000",
+                                "&requestURI=%2FWEB-INF%2Fjsp%2Felectioninfo%2F0000000000%2Fvc%2Fvccp09.jsp",
+                                "&topMenuId=VC",
+                                "&secondMenuId=VCCP09",
+                                "&menuId=VCCP09",
+                                "&statementId=VCCP09_%231",
+                                "&electionCode=1",
+                                "&electionName=20071219",
+                                "&cityCode={sido_code}",
+                                "&sggCityCode=-1",
+                                "&townCodeFromSgg=-1",
+                                "&sggTownCode=-1")
+
+
+presid_resp <- GET(presid_request) %>%
+  content(as="text") %>%
+  rvest::read_html()
+
+presid_raw <- presid_resp %>%
+  html_elements("#table01") %>%
+  html_table(fill = TRUE) %>%
+  .[[1]]
+
+presid_tbl <- presid_raw %>%
+  janitor::clean_names(ascii = FALSE) %>%
+  select(!starts_with("x")) %>%
+  set_names("구시군명", "선거인수", "투표수",
+            "대통합민주신당_정동영","한나라당_이명박",
+            "민주노동당_권영길","민주당_이인제",
+            "창조한국당_문국현","참주인연합_정근모",
+            "경제공화당_허경영","새시대참사람연합_전관",
+            "한국사회당_금민","무소속_이회창","계", "무효투표수", "기권수")  %>%
+  filter(구시군명 != "") %>%
+  filter(str_detect(선거인수, "\\d+")) %>%
+  mutate(across(선거인수:기권수, parse_number))
+
+## 4.2. 함수 -----------------------------------------------
+nec_city_code <-
+  tibble(sido = presid_resp %>%
+           html_elements("#cityCode") %>%
+           html_elements("option") %>%
+           html_text(),
+         code = presid_resp %>%
+           html_elements("#cityCode") %>%
+           html_elements("option") %>%
+           html_attr("value")
+         ) %>%
+  filter(str_length(code) > 3)
+
+get_vote_dataset <- function(sido_code) {
+  cat("\n-------------------------------------------\n",
+      "     ", sido_code,
+      "\n-------------------------------------------\n")
+  presid_request <- glue::glue("http://info.nec.go.kr/electioninfo/electionInfo_report.xhtml?",
+                               "electionId=0000000000",
+                               "&requestURI=%2FWEB-INF%2Fjsp%2Felectioninfo%2F0000000000%2Fvc%2Fvccp09.jsp",
+                               "&topMenuId=VC",
+                               "&secondMenuId=VCCP09",
+                               "&menuId=VCCP09",
+                               "&statementId=VCCP09_%231",
+                               "&electionCode=1",
+                               "&electionName=20071219",
+                               "&cityCode={sido_code}",
+                               "&sggCityCode=-1",
+                               "&townCodeFromSgg=-1",
+                               "&sggTownCode=-1")
+
+
+  presid_resp <- GET(presid_request) %>%
+    content(as="text") %>%
+    rvest::read_html()
+
+  presid_raw <- presid_resp %>%
+    html_elements("#table01") %>%
+    html_table(fill = TRUE) %>%
+    .[[1]]
+
+  presid_tbl <- presid_raw %>%
+    janitor::clean_names(ascii = FALSE) %>%
+    select(!starts_with("x")) %>%
+    set_names("구시군명", "선거인수", "투표수",
+              "대통합민주신당_정동영","한나라당_이명박",
+              "민주노동당_권영길","민주당_이인제",
+              "창조한국당_문국현","참주인연합_정근모",
+              "경제공화당_허경영","새시대참사람연합_전관",
+              "한국사회당_금민","무소속_이회창","계", "무효투표수", "기권수")  %>%
+    filter(구시군명 != "") %>%
+    filter(str_detect(선거인수, "\\d+")) %>%
+    mutate(across(선거인수:기권수, parse_number))
+
+  return(presid_tbl)
+}
+
+# get_vote_dataset(sido_code)
+
+## 4.3. 데이터 가져오기 -----------------------------------------------
+
+nec_17_raw <- nec_city_code %>%
+  mutate(data = map(code, get_vote_dataset))
+
+nec_17_raw %>%
+  slice(16) %>%
+  pull(data) %>%
+  .[[1]]
+
+## 4.5. 데이터 내보내기 -----------------------------------------------
+
+nec_17_raw %>%
+  write_rds(glue::glue("{here::here()}/inst/extdata/nec_17_raw.rds"))

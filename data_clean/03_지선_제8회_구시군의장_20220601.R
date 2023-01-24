@@ -30,7 +30,8 @@ local_sgg_raw <- local_sgg_excel %>%
   filter(!is.na(시도명))
 
 local_sgg_raw %>%
-  count(시도명)
+  count(시도명) %>%
+  summarise(sum(n))
 
 # 2. 시도별로 데이터 전처리 -----
 ## 2.1. 변수명 깔끔하게 하는 함수 -------

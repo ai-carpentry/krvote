@@ -32,12 +32,18 @@ clean_varnames <- function(raw_data) {
 #' @export
 make_dataframe_clean <- function(raw_df) {
 
-  clean_df <- raw_df %>%
-    pivot_longer(선거인수:기권수, names_to = "구분", values_to="사람수") %>%
-    mutate(사람수 = parse_number(사람수),
-              구분 = str_replace(구분, "\n", " "))
+  convert_utf_8 <- function(column) {
 
-  clean_df
+    varnames_unicode <- map_df(column, stringi::stri_escape_unicode )
+    varnames_unicode_to_korean <- map_df(varnames_unicode, stringi::stri_unescape_unicode)
+    varnames_unicode_to_korean
+  }
+
+  for (col in colnames(raw_df)) {
+    raw_df[,col] <- convert_utf_8(raw_df[,col])
+  }
+
+  raw_df
 }
 
 

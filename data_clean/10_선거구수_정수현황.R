@@ -214,7 +214,7 @@ precinct_local <- precinct_local_raw %>%
 precinct_local <- krvote::clean_varnames(precinct_local)
 
 precinct_local <- precinct_local %>%
-  mutate(data = map(data, krvote::clean_varnames))
+  mutate(data = map(data, krvote::make_dataframe_clean))
 
 usethis::use_data(precinct_local, overwrite = TRUE)
 
@@ -224,37 +224,30 @@ usethis::use_data(precinct_local, overwrite = TRUE)
 ##---------------------------------------------------------------- ---
 # 2. 국회의원 ---------------------------------------------------
 
-library(pdftools)
 library(tidyverse)
-library(tabulizer)
+library(docxtractr)
 
-precinct_PDF <- fs::dir_ls("inst/extdata/국회의원_선거구/", glob  = "*.pdf")
+precinct_2020_docx <- read_docx(glue::glue("{here::here()}/inst/extdata/국회의원_선거구/제21대 국회의원지역선거구구역표.docx"))
 
-get_tables <- function(filename) {
+precinct_2020_raw <- docx_extract_tbl(precinct_2020_docx, 1)
 
-  num_pages <- tabulizer::get_n_pages(filename)
-
-  documents <- list()
-
-  for(i in 1:num_pages) {
-    cat("pages : ", i, "\n")
-    precinct_page <- extract_tables(filename,
-                                     pages = i,
-                                     encoding = "UTF-8",
-                                     output = "matrix",
-                                     method = "lattice",
-                                     guess = FALSE)
-    documents[[i]] <- precinct_page
-  }
-
-  return(documents)
-}
-
-res <- get_tables(precinct_PDF[4])
+precinct_2020_tbl <- precinct_2020_raw %>%
+  set_names(c("선거구", "선거구역")) %>%
+  mutate(시도명 = ifelse(str_detect(선거구, "\\d{1,2}"), 선거구, NA)) %>%
+  fill(시도명, .direction = "down") %>%
+  drop_na() %>%
+  slice(2:n()) %>%
+  mutate(시도명 = str_extract(시도명, ".*?(?=\\()"),
+         선거구 = str_remove(선거구, "선거구"),
+         선거구역 = str_remove_all(선거구역, "일원")) %>%
+  select(시도명, 선거구, 선거구역)
 
 
-res_df <- map_df(res, enframe)
+## 2.1. 내보내기 ----------------------------------------------------
 
-res_df %>%
-  unnest(value)
+precinct_2020 <- krvote::clean_varnames(precinct_2020_tbl)
+
+precinct_2020 <- krvote::make_dataframe_clean(precinct_2020)
+
+usethis::use_data(precinct_2020, overwrite = TRUE)
 

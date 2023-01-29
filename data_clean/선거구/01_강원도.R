@@ -44,3 +44,18 @@ krvote_202203009 <- krvote::election_20220309$득표율 %>%
   ungroup() %>%
   left_join(kangwon_code) %>%
   select( 시도코드, 시도명, 구시군명, 후보, 선거인수, 투표수, 득표수)
+
+# 3. 2022년 대선 선거구 ----------------
+library(tidyverse)
+
+precinct <- read_delim("https://raw.githubusercontent.com/vuski/admdongkor/master/ver20220309/propertiesTable.tsv",
+                       delim="\t", locale=locale('ko', encoding='euc-kr'))
+
+precinct %>%
+  write_delim(glue::glue("{here::here()}/data_clean/선거구/propertiesTable.tsv"))
+
+precinct_raw <- read_delim(glue::glue("{here::here()}/data_clean/선거구/propertiesTable.tsv"))
+
+krvote::general_2020 %>%
+  separate(선거구, into = c("선거구", "구시군"), sep = "_") %>%
+  count(시도, 선거구)
